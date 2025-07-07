@@ -19,9 +19,17 @@ func Setup(e *echo.Echo, db *mongo.Client, logger zerolog.Logger) {
 	// Health Check
 	e.GET("/health", handlers.HealthCheck())
 
+	// Setup Swagger documentation routes
+	SetupSwaggerRoutes(e)
+
 	// API v1 group
 	v1 := e.Group("/api/v1")
-	
-	// Add your routes here
-	// Example: v1.POST("/users", handlers.CreateUser(db))
+
+	// Public routes (no authentication required)
+	SetupAuthRoutes(v1, db)
+
+	// Protected routes (authentication required)
+	protected := v1.Group("", middleware.Auth())
+	// Example of a protected route:
+	// protected.GET("/profile", handlers.GetProfile())
 }

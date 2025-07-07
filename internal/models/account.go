@@ -16,6 +16,7 @@ type Account struct {
 	Name        string            `bson:"name" json:"name" validate:"required"`
 	Email       string            `bson:"email" json:"email" validate:"required,email"`
 	PhoneNumber string            `bson:"phone_number" json:"phone_number" validate:"required"`
+	Password    string            `bson:"password" json:"-"` // Password is never returned in JSON
 	Status      AccountStatus     `bson:"status" json:"status"`
 	CreatedAt   time.Time         `bson:"created_at" json:"created_at"`
 	UpdatedAt   time.Time         `bson:"updated_at" json:"updated_at"`
