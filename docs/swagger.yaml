@@ -9,6 +9,127 @@ servers:
     description: Local development server
 
 paths:
+  /api/v1/transactions/deposit:
+    post:
+      tags:
+        - transactions
+      summary: Deposit money into account
+      description: Deposit money into a user's account and create a transaction record
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionRequest'
+      responses:
+        '200':
+          description: Successful deposit
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        '400':
+          description: Bad request - Invalid input or insufficient balance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/balances/{account_id}:
+    get:
+      tags:
+        - balances
+      summary: Get account balances
+      description: Get all currency balances for a specific account
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: account_id
+          in: path
+          required: true
+          description: ID of the account to get balances for
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalanceResponse'
+        '400':
+          description: Bad request - Invalid account ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/transactions/withdraw:
+    post:
+      tags:
+        - transactions
+      summary: Withdraw money from account
+      description: Withdraw money from a user's account and create a transaction record
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionRequest'
+      responses:
+        '200':
+          description: Successful withdrawal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        '400':
+          description: Bad request - Invalid input or insufficient balance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
   /api/auth/register:
     post:
       tags:
@@ -87,6 +208,72 @@ paths:
 
 components:
   schemas:
+    TransactionRequest:
+      type: object
+      required:
+        - account_id
+        - amount
+        - currency
+      properties:
+        account_id:
+          type: string
+          description: The ID of the account to perform the transaction on
+          example: "507f1f77bcf86cd799439011"
+        amount:
+          type: number
+          format: float
+          description: The amount to deposit or withdraw
+          minimum: 0.01
+          example: 100.50
+        currency:
+          type: string
+          description: The currency code (ISO 4217)
+          minLength: 3
+          maxLength: 3
+          example: "USD"
+
+    BalanceResponse:
+      type: object
+      properties:
+        account_id:
+          type: string
+          description: The ID of the account
+          example: "507f1f77bcf86cd799439011"
+        balances:
+          type: array
+          items:
+            $ref: '#/components/schemas/CurrencyBalance'
+
+    CurrencyBalance:
+      type: object
+      properties:
+        currency:
+          type: string
+          description: The currency code (ISO 4217)
+          example: "USD"
+        amount:
+          type: number
+          format: float
+          description: The current balance amount
+          example: 1000.50
+
+    TransactionResponse:
+      type: object
+      properties:
+        transaction_id:
+          type: string
+          description: The ID of the created transaction
+          example: "507f1f77bcf86cd799439011"
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: "insufficient balance"
+
+    # Authentication Schemas
     RegisterRequest:
       type: object
       required:

@@ -5,11 +5,12 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/Ahmed1monm/Axis-BE-assessment/pkg/utils"
 )
 
 var (
 	// SecretKey is used to sign and verify JWTs
-	SecretKey = []byte("your-secret-key") // TODO: Move to configuration
+	SecretKey = []byte(utils.GetEnv("JWT_SECRET", "your-secret-key"))
 )
 
 // Claims represents the claims in the JWT
