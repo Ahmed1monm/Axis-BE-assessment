@@ -30,6 +30,12 @@ func Setup(e *echo.Echo, db *mongo.Client, logger zerolog.Logger) {
 
 	// Protected routes (authentication required)
 	protected := v1.Group("", middleware.Auth())
-	// Example of a protected route:
-	// protected.GET("/profile", handlers.GetProfile())
+
+	// Transaction routes
+	transactionHandler := handlers.NewTransactionHandler(services.NewTransactionService(db))
+	SetupTransactionRoutes(protected, transactionHandler)
+
+	// Balance routes
+	balanceHandler := handlers.NewBalanceHandler(services.NewBalanceService(db))
+	SetupBalanceRoutes(protected, balanceHandler)
 }
