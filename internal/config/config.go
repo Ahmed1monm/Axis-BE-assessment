@@ -1,6 +1,6 @@
 package config
 
-import "axis-be-assessment/pkg/utils"
+import "github.com/Ahmed1monm/Axis-BE-assessment/pkg/utils"
 
 type Config struct {
 	MongoURI     string

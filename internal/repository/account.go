@@ -29,7 +29,7 @@ func (r *accountRepository) Create(ctx context.Context, dto *dtos.CreateAccountD
 		Email:       dto.Email,
 		PhoneNumber: dto.PhoneNumber,
 		Password:    dto.Password,
-		Status:      dto.Status,
+		Status:      models.AccountStatus(dto.Status),
 		CreatedAt:   dto.CreatedAt,
 		UpdatedAt:   dto.UpdatedAt,
 	}

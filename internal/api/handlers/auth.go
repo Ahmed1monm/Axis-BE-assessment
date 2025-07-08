@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -32,6 +33,7 @@ func (h *AuthHandler) Register(c echo.Context) error {
 	}
 
 	response, err := h.authService.Register(c.Request().Context(), input)
+	fmt.Printf("DEBUG: Register response=%%#v, err=%%v\n", response, err)
 	if err != nil {
 		if err == services.ErrEmailExists {
 			return c.JSON(http.StatusConflict, map[string]string{"error": "Email already exists"})
@@ -54,6 +56,7 @@ func (h *AuthHandler) Login(c echo.Context) error {
 	}
 
 	response, err := h.authService.Login(c.Request().Context(), input)
+	fmt.Printf("DEBUG: Login response=%%#v, err=%%v\n", response, err)
 	if err != nil {
 		if err == services.ErrInvalidCredentials {
 			return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid credentials"})

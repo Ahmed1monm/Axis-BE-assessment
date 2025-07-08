@@ -6,7 +6,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"axis-be-assessment/pkg/jwt"
+	"github.com/Ahmed1monm/Axis-BE-assessment/pkg/jwt"
 )
 
 // UserIDKey is the key used to store the user ID in the context

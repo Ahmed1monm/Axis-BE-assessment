@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/Ahmed1monm/Axis-BE-assessment/pkg/utils"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 var (

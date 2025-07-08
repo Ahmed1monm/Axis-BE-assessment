@@ -15,7 +15,7 @@ import (
 
 var (
 	ErrInvalidCredentials = errors.New("invalid credentials")
-	ErrEmailExists       = errors.New("email already exists")
+	ErrEmailExists        = errors.New("email already exists")
 )
 
 type AuthService interface {
@@ -52,7 +52,7 @@ func (s *authService) Register(ctx context.Context, input dtos.RegisterRequest) 
 		Email:       input.Email,
 		PhoneNumber: input.PhoneNumber,
 		Password:    string(hashedPassword),
-		Status:      models.AccountStatusActive,
+		Status:      string(models.AccountStatusActive),
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 	}
@@ -62,8 +62,8 @@ func (s *authService) Register(ctx context.Context, input dtos.RegisterRequest) 
 		return nil, err
 	}
 
-	// Generate JWT token
-	token, err := jwt.GenerateToken(uint(account.ID.Counter()))
+	// Generate JWT token using timestamp as uint
+	token, err := jwt.GenerateToken(uint(account.ID.Timestamp().Unix()))
 	if err != nil {
 		return nil, err
 	}
@@ -89,8 +89,8 @@ func (s *authService) Login(ctx context.Context, input dtos.LoginRequest) (*dtos
 		return nil, ErrInvalidCredentials
 	}
 
-	// Generate JWT token
-	token, err := jwt.GenerateToken(uint(account.ID.Counter()))
+	// Generate JWT token using timestamp as uint
+	token, err := jwt.GenerateToken(uint(account.ID.Timestamp().Unix()))
 	if err != nil {
 		return nil, err
 	}

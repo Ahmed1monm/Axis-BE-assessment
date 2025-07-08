@@ -2,7 +2,6 @@ package services
 
 import (
 	"context"
-	"time"
 
 	"github.com/Ahmed1monm/Axis-BE-assessment/internal/dtos"
 	"github.com/Ahmed1monm/Axis-BE-assessment/internal/models"
@@ -17,29 +16,27 @@ var (
 )
 
 type TransactionService struct {
-	db                *mongo.Database
-	transactionRepo   repository.TransactionRepository
-	balanceRepo      repository.BalanceRepository
+	db              *mongo.Database
+	transactionRepo repository.TransactionRepository
+	balanceRepo     repository.BalanceRepository
 }
-
-
 
 func NewTransactionService(db *mongo.Database) *TransactionService {
 	return &TransactionService{
 		db:              db,
 		transactionRepo: repository.NewTransactionRepository(db),
-		balanceRepo:    repository.NewBalanceRepository(db),
+		balanceRepo:     repository.NewBalanceRepository(db),
 	}
 }
 
 func (s *TransactionService) Deposit(ctx context.Context, accountID primitive.ObjectID, amount float64, currency string) (string, error) {
 	if amount <= 0 {
-		return nil, utils.ErrInvalidAmount
+		return "", utils.ErrInvalidAmount
 	}
 
 	session, err := s.db.Client().StartSession()
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 	defer session.EndSession(ctx)
 
@@ -73,22 +70,41 @@ func (s *TransactionService) Deposit(ctx context.Context, accountID primitive.Ob
 
 	if err != nil {
 		if abortErr := session.AbortTransaction(ctx); abortErr != nil {
-			return nil, abortErr
+			return "", abortErr
 		}
-		return nil, err
+		return "", err
 	}
 
 	return transaction.ID.Hex(), nil
 }
 
+func (s *TransactionService) GetBalances(ctx context.Context, accountID primitive.ObjectID) (*dtos.BalancesResponse, error) {
+	balances, err := s.balanceRepo.GetBalances(ctx, accountID)
+	if err != nil {
+		return nil, err
+	}
+
+	currencyBalances := make([]dtos.CurrencyBalance, len(balances))
+	for i, balance := range balances {
+		currencyBalances[i] = dtos.CurrencyBalance{
+			Currency: balance.Currency,
+			Amount:   balance.Amount,
+		}
+	}
+
+	return &dtos.BalancesResponse{
+		Balances: currencyBalances,
+	}, nil
+}
+
 func (s *TransactionService) Withdraw(ctx context.Context, accountID primitive.ObjectID, amount float64, currency string) (string, error) {
 	if amount <= 0 {
-		return nil, utils.ErrInvalidAmount
+		return "", utils.ErrInvalidAmount
 	}
 
 	session, err := s.db.Client().StartSession()
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 	defer session.EndSession(ctx)
 
@@ -122,9 +138,9 @@ func (s *TransactionService) Withdraw(ctx context.Context, accountID primitive.O
 
 	if err != nil {
 		if abortErr := session.AbortTransaction(ctx); abortErr != nil {
-			return nil, abortErr
+			return "", abortErr
 		}
-		return nil, err
+		return "", err
 	}
 
 	return transaction.ID.Hex(), nil

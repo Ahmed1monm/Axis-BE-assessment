@@ -6,11 +6,8 @@ import (
 
 	"github.com/Ahmed1monm/Axis-BE-assessment/internal/dtos"
 	"github.com/Ahmed1monm/Axis-BE-assessment/internal/models"
-	"github.com/Ahmed1monm/Axis-BE-assessment/pkg/utils"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type TransactionRepository interface {
@@ -29,13 +26,13 @@ func (r *transactionRepository) CreateTransaction(ctx context.Context, dto *dtos
 	transaction := &models.Transaction{
 		ID:              primitive.NewObjectID(),
 		AccountID:       dto.AccountID,
-		Type:           models.TransactionType(dto.Type),
-		Amount:         dto.Amount,
-		Currency:       dto.Currency,
-		Status:         models.TransactionStatusCompleted,
+		Type:            models.TransactionType(dto.Type),
+		Amount:          dto.Amount,
+		Currency:        dto.Currency,
+		Status:          models.TransactionStatusCompleted,
 		TransactionDate: time.Now(),
-		CreatedAt:      time.Now(),
-		UpdatedAt:      time.Now(),
+		CreatedAt:       time.Now(),
+		UpdatedAt:       time.Now(),
 	}
 
 	collection := r.db.Collection(models.TransactionCollection)

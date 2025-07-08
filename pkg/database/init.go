@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"axis-be-assessment/internal/models"
+	"github.com/Ahmed1monm/Axis-BE-assessment/internal/models"
 
 	"github.com/rs/zerolog/log"
 	"go.mongodb.org/mongo-driver/mongo"

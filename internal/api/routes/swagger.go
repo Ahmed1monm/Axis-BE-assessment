@@ -3,7 +3,7 @@ package routes
 import (
 	"github.com/labstack/echo/v4"
 
-	"axis-be-assessment/internal/api/handlers"
+	"github.com/Ahmed1monm/Axis-BE-assessment/internal/api/handlers"
 )
 
 // SetupSwaggerRoutes configures the Swagger documentation routes

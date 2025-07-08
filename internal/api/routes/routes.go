@@ -1,13 +1,14 @@
 package routes
 
 import (
-	"axis-be-assessment/internal/api/handlers"
-	"axis-be-assessment/internal/api/middleware"
-
 	"github.com/labstack/echo/v4"
 	echomw "github.com/labstack/echo/v4/middleware"
 	"github.com/rs/zerolog"
 	"go.mongodb.org/mongo-driver/mongo"
+
+	"github.com/Ahmed1monm/Axis-BE-assessment/internal/api/handlers"
+	"github.com/Ahmed1monm/Axis-BE-assessment/internal/api/middleware"
+	"github.com/Ahmed1monm/Axis-BE-assessment/internal/services"
 )
 
 func Setup(e *echo.Echo, db *mongo.Client, logger zerolog.Logger) {

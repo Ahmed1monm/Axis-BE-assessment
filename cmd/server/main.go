@@ -3,10 +3,10 @@ package main
 import (
 	"context"
 
-	"axis-be-assessment/internal/api/routes"
-	"axis-be-assessment/internal/config"
-	"axis-be-assessment/pkg/database"
-	"axis-be-assessment/pkg/logger"
+	"github.com/Ahmed1monm/Axis-BE-assessment/internal/api/routes"
+	"github.com/Ahmed1monm/Axis-BE-assessment/internal/config"
+	"github.com/Ahmed1monm/Axis-BE-assessment/pkg/database"
+	"github.com/Ahmed1monm/Axis-BE-assessment/pkg/logger"
 
 	"github.com/labstack/echo/v4"
 )

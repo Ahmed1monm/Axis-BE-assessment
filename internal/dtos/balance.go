@@ -6,6 +6,11 @@ type BalanceResponse struct {
 	Balances  []CurrencyBalance `json:"balances"`
 }
 
+// BalancesResponse represents the response for getting all balances
+type BalancesResponse struct {
+	Balances []CurrencyBalance `json:"balances"`
+}
+
 // CurrencyBalance represents a balance for a specific currency
 type CurrencyBalance struct {
 	Currency string  `json:"currency" validate:"required,len=3"`
